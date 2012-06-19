@@ -15,3 +15,51 @@ body {
 .subhead h1 {
     font-size: 54px;
 }
+
+.picko {
+    background: #eee;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    line-height: 24px;
+    border-top: none;
+    border-radius: 0 0 3px 3px;
+    position: absolute;
+    top: 0;
+    left: 24px;
+    opacity: 0.75;
+    display: none;
+}
+
+.byte-input {
+    width: 50px;
+}
+
+.select-group {
+    .input-prepend {
+        display: block;
+        margin-bottom: 9px;
+    }
+}
+
+.background {
+    position: relative;
+    height: 500px;
+
+    &:hover .picko {
+        display: block;
+    }
+
+    .foreground {
+        background: white;
+        width: 50%;
+        height: 250px;
+        margin-left: -25%;
+        margin-top: -125px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+    }
+}
