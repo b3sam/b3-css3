@@ -202,6 +202,7 @@ box-shadow: 0 0 #000000;</pre>
             <script src="js/bootstrap.min.js"></script>
             <script src="js/bootstrap-colorpicker.js"></script>
             <script src="js/prettify/prettify.js"></script>
+            <script src="js/b3css3.js"></script>
             <script>
             var Colour = function() {
                     this.values = {
@@ -299,19 +300,17 @@ box-shadow: 0 0 #000000;</pre>
 
                 var boxShadow = function() {
                     var settings = {
-                            mode: 'hex'
-                            target: ''
-                        },
+                        mode: 'hex',
+                        target: ''
+                    },
 
-                        shadow = {
-                            x      : 0,
-                            y      : 0,
-                            blur   : 0,
-                            spread : 0,
-                            colour : new Colour()
-                        };
-
-
+                    shadow = {
+                        x      : 0,
+                        y      : 0,
+                        blur   : 0,
+                        spread : 0,
+                        colour : new Colour()
+                    };
                 };
 
             $(function(){
