@@ -31,7 +31,7 @@
             };
 
             // Get a color string we can use in our CSS
-            var toString = function(mode) {
+            var toString = function (mode) {
                 var string = strings[mode],
                     color = getColorObject.call(this, mode);
 
@@ -43,7 +43,7 @@
                 return string;
             };
 
-            var getColorObject = function(mode) {
+            var getColorObject = function (mode) {
                 if (mode === 'rgb' || mode == 'rgba')
                 {
                     return this.rgba;
@@ -62,7 +62,7 @@
 
             //http://en.wikipedia.org/wiki/HSL_color_space
             var RGBAtoHSLA = function (rgba) {
-                r = rgba.r; g = rgba.g; b = rgba.b; a = rgba.a;
+                var r = rgba.r, g = rgba.g, b = rgba.b, a = rgba.a;
 
                 r /= 255, g /= 255, b /= 255; // Scale RGB to the range [0,1]
 
@@ -90,8 +90,46 @@
                 };
             };
 
+            //http://en.wikipedia.org/wiki/HSL_and_HSV#Converting_to_RGB
+            var HSLAtoRGBA = function (hsla) {
+                var h = hsla.h, s = hsla.s, l = hsla.l, a = hsla.a;
+
+                var H = h / 60,
+                    S = s / 100, L = l / 100, // Scale S and L to the range [0,1]
+
+                    C = (1 - Math.abs(2 * L - 1)) * S, // "Chroma"
+                    X = C * (1 - Math.abs(H % 2 - 1)), // Second largest component
+                    m = L - (C / 2), // Match lightness
+                    R = G = B = m;
+
+                i = ~~H; // H'index
+                R += [C, X, 0, 0, X, C][i];
+                G += [X, C, C, X, 0, 0][i];
+                B += [0, 0, X, C, C, X][i];
+
+                // Round these badboys and put them on an 8 bit scale yo
+                return {
+                    r: Math.round(R * 255),
+                    b: Math.round(G * 255),
+                    g: Math.round(B * 255),
+                    a: a
+                };
+            };
+
+            var RGBAtoHex = function (rgba) {
+                var r = rgba.r, g = rgba.g, b = rgba.b;
+
+                var hex = (16777216 + (r << 16)  + (g << 8) + b).toString(16).slice(1); // Convert to nice big 24bit colour value, turn into hex and chop off pre-pended 1
+
+                return {
+                    hex : ['#', hex].join('')
+                };
+            };
+
             return {
-                toString : toString
+                toString : toString,
+                HSLAtoRGBA : HSLAtoRGBA,
+                RGBAtoHex : RGBAtoHex
             };
         })();
 
