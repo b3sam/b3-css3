@@ -12,10 +12,10 @@
     B3.Transform = {};
 
     B3.Utilities = (function() {
-        var Color = function(){
-            this.rgba = {
+        var Color = function (color){
+            this.rgba = color || {
                 r : 0,
-                g : 255,
+                g : 0,
                 b : 0,
                 a : 0
             };
@@ -26,7 +26,7 @@
                 rgb  : 'rgb({{r}}, {{g}}, {{b}})',
                 rgba : 'rgba({{r}}, {{g}}, {{b}}, {{a}})',
                 hsl  : 'hsl({{h}}, {{s}}, {{l}})',
-                hsla : 'hsl({{h}}, {{s}}, {{l}}, {{a}})',
+                hsla : 'hsla({{h}}, {{s}}, {{l}}, {{a}})',
                 hex  : '#{{hex}}'
             };
 
@@ -102,7 +102,7 @@
                     m = L - (C / 2), // Match lightness
                     R = G = B = m;
 
-                i = ~~H; // H'index
+                var i = ~~H; // H'index
                 R += [C, X, 0, 0, X, C][i];
                 G += [X, C, C, X, 0, 0][i];
                 B += [0, 0, X, C, C, X][i];
@@ -126,18 +126,91 @@
                 };
             };
 
+            var setRGBA = function (r, g, b, a) {
+                // Make sure we got valid values for RGB
+                r = (r >= 0 && r <= 255) ? r : 0;
+                g = (g >= 0 && g <= 255) ? g : 0;
+                b = (b >= 0 && b <= 255) ? b : 0;
+
+                // Make sure our alpha value is cool
+                a = (a >= 0 && a <= 1) ? a : 1;
+
+                setColor.call(this, {
+                    r: r,
+                    g: g,
+                    b: b,
+                    a: a
+                });
+            };
+
+            var setHSLA = function (h, s, l, a) {
+                // Make sure we got valid values for HSL
+                h = (h >= 0 && h <= 360) ? h : 0;
+                s = (s >= 0 && s <= 100) ? s : 0;
+                l = (l >= 0 && l <= 100) ? l : 0;
+
+                // Make sure our alpha value is cool
+                a = (a >= 0 && a <= 1) ? a : 1;
+
+                var rgba = HSLAtoRGBA({
+                    h: h,
+                    s: s,
+                    l: l,
+                    a: a
+                });
+
+                setColor.call(this, rgba);
+            };
+
+            var setHex = function (hex) {
+                var short_hex_regex = /^[0-9a-f]{3}$/i,
+                    long_hex_regex = /^[0-9a-f]{6}$/i;
+
+                // If we've got a shortform hex, make it longer
+                hex = hex.match(short_hex_regex) ? [ Array(3).join(hex.charAt(0)),
+                                                     Array(3).join(hex.charAt(1)),
+                                                     Array(3).join(hex.charAt(2))].join('') : hex;
+
+                // Is this hex real valid? If not, we're going to set it black
+                hex = hex.match(long_hex_regex) ? hex : '000000';
+
+                var rgba = {
+                    r: parseInt(hex.substr(0,2), 16),
+                    g: parseInt(hex.substr(2,2), 16),
+                    b: parseInt(hex.substr(4,2), 16),
+                    a: 1 // Hex is always gonna have 100% alpha
+                };
+
+                setColor.call(this, rgba);
+            };
+
+            var setColor = function (rgba) {
+                this.rgba = rgba || {
+                    r : 0,
+                    g : 0,
+                    b : 0,
+                    a : 0
+                };
+            };
+
             return {
                 toString : toString,
-                HSLAtoRGBA : HSLAtoRGBA,
-                RGBAtoHex : RGBAtoHex
+                setRGBA : setRGBA,
+                setHSLA : setHSLA,
+                setHex : setHex
             };
         })();
+
+        // Quick getter for the colour so we can pass in a default...
+        var getColor = function (colour) {
+            return new Color(colour);
+        };
 
         var SelectGroup = {},
             UnitWatch = {};
 
         return {
-            Color       : new Color(),
+            Color       : getColor,
             SelectGroup : SelectGroup,
             UnitWatch   : UnitWatch
         };
