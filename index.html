@@ -112,7 +112,7 @@
                                                 <div class="control-group">
                                                     <label class="control-label" for="colour">Colour</label>
                                                     <div class="controls">
-                                                        <select name="colour-mode" class="span1" data-select="colour">
+                                                        <select name="colour-mode" class="span1" id="box-shadow-colour" data-select="colour">
                                                             <option value="hex">Hex</option>
                                                             <option value="rgba">RGBA</option>
                                                             <option value="hsla">HSLA</option>
@@ -120,7 +120,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="control-group" data-select-group="colour-hex">
+                                                <div class="control-group select-group" data-select-group="colour" data-select-value="hex">
                                                     <div class="controls">
                                                         <div class="input-prepend">
                                                             <span class="add-on">#</span><input class="span1" name="hex" size="6" value="000000" type="text">
@@ -129,7 +129,7 @@
                                                 </div>
 
 
-                                                <div class="control-group select-group" data-select-group="colour-rgba">
+                                                <div class="control-group select-group" data-select-group="colour" data-select-value="rgba">
                                                     <div class="controls">
                                                         <div class="input-prepend">
                                                             <span class="add-on">R</span><input class="byte-input" name="rgba[r]" size="3" min="0" max="255" step="1" value="0" type="number">
@@ -149,7 +149,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="control-group select-group" data-select-group="colour-hsla">
+                                                <div class="control-group select-group" data-select-group="colour" data-select-value="hsla">
                                                     <div class="controls">
                                                         <div class="input-prepend">
                                                             <span class="add-on">H</span><input class="byte-input" name="hsla[h]" size="3" min="0" max="360" step="1" value="0" type="number">
@@ -184,9 +184,9 @@
                                     </div>
                                 </div>
 
-                                <pre class="prettyprint linenums">-moz-box-shadow: 0 0 #000000;
--webkit-box-shadow: 0 0 #000000;
-box-shadow: 0 0 #000000;</pre>
+                                <pre class="prettyprint linenums">box-shadow: 0 0 #000000;
+-moz-box-shadow: 0 0 #000000;
+-webkit-box-shadow: 0 0 #000000;</pre>
                             </div>
                         </div>
                     </div>
@@ -204,100 +204,6 @@ box-shadow: 0 0 #000000;</pre>
             <script src="js/prettify/prettify.js"></script>
             <script src="js/b3css3.js"></script>
             <script>
-            var Colour = function() {
-                    this.values = {
-                        hex : '000000',
-                        rgba : {
-                            r : 0,
-                            g : 0,
-                            b : 0,
-                            a : 1
-                        },
-                        hsla : {
-                            h : 0,
-                            s : 0,
-                            l : 0,
-                            a : 1
-                        }
-                    };
-                };
-
-                Colour.prototype = (function() {
-                    var setHex = function(hex) {
-                        this.values.hex = hex;
-                    }
-
-                    var setRGBA = function(r, g, b, a) {
-                        this.values.rgba = {
-                            r : r,
-                            g : g,
-                            b : b,
-                            a : a
-                        };
-                    }
-
-                    var setHSLA = function(h, s, l, a) {
-                        this.values.rgba = {
-                            h : h,
-                            s : s,
-                            l : l,
-                            a : a
-                        };
-                    }
-
-                    var getHex = function() {
-                        return this.values.hex;
-                    }
-
-                    var getRGBA = function() {
-                        return this.values.rgba;
-                    }
-
-                    var getHSLA = function() {
-                        return this.values.hsla;
-                    }
-
-                    var getColourString = function(mode) {
-                        switch(mode) {
-                            case 'hex':
-                                return ['#', this.values.hex].join('');
-                            break;
-
-                            case 'rgba':
-                                var rgba = [
-                                    this.values.rgba.r,
-                                    this.values.rgba.g,
-                                    this.values.rgba.b,
-                                    this.values.rgba.a
-                                ];
-                                return ['rgba(', rgba.join(', '), ')'].join('');
-                            break;
-
-                            case 'hsla':
-                                var hsla = [
-                                    this.values.hsla.h,
-                                    this.values.hsla.s,
-                                    this.values.hsla.l,
-                                    this.values.hsla.a
-                                ];
-                                return ['hsla', hsla.join(', '), ')'].join('');
-                            break;
-                        }
-                    }
-
-                    return {
-                        setHex  : setHex,
-                        setRGBA : setRGBA,
-                        setHSLA : setHSLA,
-
-                        getHex  : getHex,
-                        getRGBA : getRGBA,
-                        getHSLA : getHSLA,
-
-                        getColour : getColourString
-                    };
-                })();
-
                 var boxShadow = function() {
                     var settings = {
                         mode: 'hex',
@@ -315,6 +221,8 @@ box-shadow: 0 0 #000000;</pre>
 
             $(function(){
                 prettyPrint();
+
+                B3.Utilities.SelectGroup('#box-shadow-colour')
             });
             </script>
         </body>

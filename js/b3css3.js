@@ -3,7 +3,7 @@
 //BoxShadow
 //Picko
 
-;(function(B3, window, undefined) {
+;(function(B3, $, window, undefined) {
 
     B3.BorderRadius = {};
     B3.BoxShadow = {};
@@ -175,9 +175,9 @@
                 hex = hex.match(long_hex_regex) ? hex : '000000';
 
                 var rgba = {
-                    r: parseInt(hex.substr(0,2), 16),
-                    g: parseInt(hex.substr(2,2), 16),
-                    b: parseInt(hex.substr(4,2), 16),
+                    r: parseInt(hex.substr(0, 2), 16),
+                    g: parseInt(hex.substr(2, 2), 16),
+                    b: parseInt(hex.substr(4, 2), 16),
                     a: 1 // Hex is always gonna have 100% alpha
                 };
 
@@ -206,8 +206,29 @@
             return new Color(colour);
         };
 
-        var SelectGroup = {},
-            UnitWatch = {};
+        var SelectGroup = function(select, options) {
+            var defaults = {
+                select_group_selector : '.select-group'
+            };
+
+            var settings = $.extend(defaults, options);
+
+            var $select = $(select);
+                $select_groups = $('[data-select-group="' + $select.data('select') + '"]');
+
+            var showHideGroups = function() {
+                // Hide all but the selected group...
+                var group = $('option:selected', $select).val();
+
+                $(settings.select_group_selector).show().not('[data-select-value="' + group + '"]').hide();
+            };
+
+            showHideGroups();
+
+            $select.on('change', showHideGroups);
+        };
+
+        var UnitWatch = {};
 
         return {
             Color       : getColor,
@@ -216,4 +237,4 @@
         };
     })();
 
-})( window.B3 = window.B3 || {}, window );
+})( window.B3 = window.B3 || {}, $, window );
