@@ -54,7 +54,7 @@
                 }
                 else if (mode === 'hex')
                 {
-                    return RGBAtoHEX(this.rgba);
+                    return RGBAtoHex(this.rgba);
                 }
 
                 return;
@@ -122,7 +122,7 @@
                 var hex = (16777216 + (r << 16)  + (g << 8) + b).toString(16).slice(1); // Convert to nice big 24bit colour value, turn into hex and chop off pre-pended 1
 
                 return {
-                    hex : ['#', hex].join('')
+                    hex : hex
                 };
             };
 
